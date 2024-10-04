@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div>
     <SelectLocation/>
-    Home</div>
+    </div>
   )
 }
 

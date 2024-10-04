@@ -11,12 +11,12 @@ const SelectLocation = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Submitted value:", location);
-    // Perform any action with the inputValue
   };
+
   return (
     <form onSubmit={handleSubmit}>
     <label>
-      Enter a string:
+      Enter a City:
       <input 
         type="text" 
         value={location} 
