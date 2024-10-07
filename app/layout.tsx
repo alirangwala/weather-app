@@ -1,3 +1,4 @@
+import "./globals.css";
 import SessionWrapper from "@/components/SessionWrapper";
 
 export default function RootLayout({
@@ -7,7 +8,7 @@ export default function RootLayout({
 }>) {
   return (
     <SessionWrapper>
-      <html lang="en">
+      <html lang="en" data-theme="winter">
         <body>
           {children}
         </body>
