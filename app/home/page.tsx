@@ -1,6 +1,5 @@
 import React from 'react'
 import SelectLocation from './SelectLocation'
-import Login from '@/components/Login'
 import TitleBar from '@/components/TitleBar'
 
 const Home = () => {
@@ -8,6 +7,7 @@ const Home = () => {
         <div >
             <TitleBar />
             <div className="flex bg-primary-content">
+                <div>Instructions here</div>
                 <SelectLocation />
             </div>
         </div>

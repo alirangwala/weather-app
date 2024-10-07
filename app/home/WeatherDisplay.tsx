@@ -32,9 +32,10 @@ const defaultWeatherObj = {
     uv_index: 0,
     visibility: 0
 }
+const DEFAULT_ERROR_COPY = "Please enter a valid location"
 const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
     const [weatherData, setWeatherData] = useState<WeatherObj>(defaultWeatherObj);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(DEFAULT_ERROR_COPY);
 
 
     useEffect(() => {
