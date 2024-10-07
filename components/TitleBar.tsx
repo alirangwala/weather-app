@@ -11,11 +11,14 @@ const TitleBar = async () => {
     const session = await getServerSession(authOptions)
 
     return (
-        <div className="navbar bg-secondary-content">
-            {session && <div className="text-3xl font-bold text-primary">Welcome {session.user!.name} !</div>} 
-            <div className="navbar-end text-3xl font-bold text-primary">{TITLE_COPY}</div>
-            <div className="navbar-end">
-                <Login/>
+        <div className="navbar bg-secondary-content py-4 px-6 shadow-md flex justify-between items-center">
+            <div className="text-3xl font-bold text-center flex-grow">
+                {session ? `Welcome, ${session.user!.name}!` : ''}
+            </div>
+            <div className="text-3xl font-bold text-center flex-grow">
+                {TITLE_COPY}</div>
+            <div className="flex items-center space-x-4">
+                <Login />
                 <Settings />
             </div>
         </div>

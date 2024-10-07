@@ -35,7 +35,7 @@ const defaultWeatherObj = {
 const DEFAULT_ERROR_COPY = "Please enter a valid location"
 const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
     const [weatherData, setWeatherData] = useState<WeatherObj>(defaultWeatherObj);
-    const [error, setError] = useState<string | null>(DEFAULT_ERROR_COPY);
+    const [error, setError] = useState<string | null>(null);
 
 
     useEffect(() => {
@@ -51,7 +51,6 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
             if (data.error) {
                 setError("Please enter a valid location");
             } else {
-                console.log(data)
                 let formattedData: WeatherObj = {
                     city: data.location.name,
                     country: data.location.country,
@@ -76,20 +75,28 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
     return (
         <div>
             {error ? (
-                <div className="text-red-500">{error}</div>
+                <div className="text-red-500 text-center mb-4">{error}</div>
             ) : weatherData ? (
+                <>
+                <div className="text-center text-2xl font-bold mb-6">
+                {weatherData.city}, {weatherData.country}
+                </div>
+                <div className="grid grid-cols-2 gap-6 text-gray-700">
                 <ul>
-                    <li>Location: {weatherData.city}, {weatherData.country}</li>
                     <li>Temperature: {weatherData.temperature}°C</li>
                     <li>Wind Speed: {weatherData.wind_speed} km/h</li>
                     <li>Pressure: {weatherData.pressure} hPa</li>
                     <li>Precipitation: {weatherData.precip} mm</li>
+                    </ul>
+                <ul>
                     <li>Humidity: {weatherData.humidity}%</li>
                     <li>Cloud Cover: {weatherData.cloudcover}%</li>
                     <li>Feels Like: {weatherData.feelslike}°C</li>
                     <li>UV Index: {weatherData.uv_index}</li>
                     <li>Visibility: {weatherData.visibility} km</li>
                 </ul>
+                </div>
+                </>
             ) : (
                 <div>Loading weather data...</div>
             )}
