@@ -1,11 +1,9 @@
 'use client'
 import React, { useState } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useAppContext } from '@/context';
 import { useSession } from 'next-auth/react';
 
 const Settings = () => {
-    const { state, changeApiKey, changeApiUrl } = useAppContext()
     const { data: session } = useSession();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +15,11 @@ const Settings = () => {
         setIsOpen(!isOpen);
     };
 
+    const reloadSession = () => {
+        const event = new Event('visibilitychange');
+        document.dispatchEvent(event);
+      };
+      
     const setUserApiInfo = async (email: string) => {
         const updated_data = {
             "apiUrl": apiUrlInput,
@@ -30,6 +33,13 @@ const Settings = () => {
             },
             body: JSON.stringify(updated_data),
           });
+          if (response.ok) {
+            const updatedUserData = await response.json();
+            // Once successful, trigger session reload to fetch the new session data
+            reloadSession();
+            console.log(session)
+
+          }
         } catch (error) {
           console.error('Error updating data:', error);
         }
@@ -40,8 +50,6 @@ const Settings = () => {
         if (session && session.user?.email) {
             await setUserApiInfo(session.user.email)
           }
-        changeApiKey(apiKeyInput)
-        changeApiUrl(apiUrlInput)
         console.log("Submitted API Info");
     };
 

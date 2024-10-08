@@ -6,9 +6,17 @@ import {encrypt} from "../server/encryption.js"
 
 async function openDB() {
   return open({
+    // Change to a relative path
     filename: '/Users/alirangwala/weather-app/server/database.sqlite', 
     driver: sqlite3.Database
   });
+}
+
+declare module "next-auth" {
+  interface Session {
+    apiKey?: string;
+    apiUrl?: string;
+  }
 }
 
 async function findUserByEmail(email: string) {
@@ -33,8 +41,6 @@ async function findUserByEmail(email: string) {
 async function createUser(email: string, name: string) {
   const db = await openDB();
   try {
-    console.log("FDSFADS")
-    console.log(encrypt(process.env.NEXT_PUBLIC_WEATHERSTACK_API_KEY))
     const result = await db.run(
       'INSERT INTO users (email, name, apiUrl, apiKey) VALUES (?, ?, ?, ?)',
       [email, name, process.env.NEXT_PUBLIC_WEATHERSTACK_API_URL, encrypt(process.env.NEXT_PUBLIC_WEATHERSTACK_API_KEY)]
@@ -58,7 +64,7 @@ export const authOptions: NextAuthOptions = ({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user}) {
       try {
         const existingUser = await findUserByEmail(user.email || "");
         
@@ -75,5 +81,13 @@ export const authOptions: NextAuthOptions = ({
         return false; 
       }
     },
+    async session({ session }) {
+      const existingUser = await findUserByEmail(session.user?.email || "");
+      if (existingUser) {
+        session.apiKey = existingUser.apiKey;  
+        session.apiUrl = existingUser.apiUrl;
+      }
+      return session;
+    }
   },
 });

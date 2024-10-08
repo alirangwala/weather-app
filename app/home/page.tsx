@@ -1,8 +1,9 @@
 import React from 'react'
 import SelectLocation from './SelectLocation'
 import TitleBar from '@/components/TitleBar'
+import WeatherDisplay from './WeatherDisplay'
 
-const INSTRUCTION_COPY = "Welcome to your weather app. Please enter a city to the left to discover the weather. If you have previously used this application, please sign in so we can fetch the latest city you looked up."
+const INSTRUCTION_COPY = "Welcome to your weather app. Please enter a city to the left to discover the weather. If you would like to change your API key or URL please press the settings icon in the top right corner"
 const Home = () => {
     return (
         <div className="bg-primary-content">
@@ -13,6 +14,11 @@ const Home = () => {
                     <p>{INSTRUCTION_COPY}</p>
                 </div>
                 <SelectLocation />
+            </div>
+            <div className = "flex">
+                    <WeatherDisplay city="ST. Louis" />
+                    <WeatherDisplay city="New York" />
+                    <WeatherDisplay city="San Diego"/>
             </div>
         </div>
     )

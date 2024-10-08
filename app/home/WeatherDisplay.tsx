@@ -1,5 +1,6 @@
 'use client'
-import { useAppContext } from '@/context';
+import { decrypt } from '@/server/encryption';
+import { useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react'
 
 interface WeatherDisplayProps {
@@ -33,14 +34,11 @@ const defaultWeatherObj = {
     uv_index: 0,
     visibility: 0
 }
-const DEFAULT_ERROR_COPY = "Please enter a valid location"
-
 const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
-
-    const {state, changeApiKey, changeApiUrl} = useAppContext()
-
     const [weatherData, setWeatherData] = useState<WeatherObj>(defaultWeatherObj);
     const [error, setError] = useState<string | null>(null);
+
+    const { data: session } = useSession();
 
 
     useEffect(() => {
@@ -51,7 +49,9 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
 
     const fetchWeather = async () => {
         try {
-            const response = await fetch(`${state.api_url}?access_key=${state.api_key}&query=${city}`);
+
+            const response = session ? await fetch(`${session?.apiUrl}?access_key=${decrypt(session?.apiKey)}&query=${city}`) :
+                await fetch(`${process.env.NEXT_PUBLIC_WEATHERSTACK_API_URL}?access_key=${process.env.NEXT_PUBLIC_WEATHERSTACK_API_KEY}&query=${city}`)
             const data = await response.json();
             if (data.error) {
                 setError("Please enter a valid location");
@@ -73,34 +73,34 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
                 setError(null);
             }
         } catch (err) {
-            setError(`Failed to fetch weather data: ${err}`);
+            setError(`Failed to fetch weather data ${err}`);
         }
     };
 
     return (
-        <div>
+        <div className="h-64 bg-white shadow-lg rounded-lg p-8 m-4 break-words text-ellipsis">
             {error ? (
                 <div className="text-red-500 text-center mb-4">{error}</div>
             ) : weatherData ? (
                 <>
-                <div className="text-center text-2xl font-bold mb-6">
-                {weatherData.city}, {weatherData.country}
-                </div>
-                <div className="grid grid-cols-2 gap-6 text-gray-700">
-                <ul>
-                    <li>Temperature: {weatherData.temperature}°C</li>
-                    <li>Wind Speed: {weatherData.wind_speed} km/h</li>
-                    <li>Pressure: {weatherData.pressure} hPa</li>
-                    <li>Precipitation: {weatherData.precip} mm</li>
-                    </ul>
-                <ul>
-                    <li>Humidity: {weatherData.humidity}%</li>
-                    <li>Cloud Cover: {weatherData.cloudcover}%</li>
-                    <li>Feels Like: {weatherData.feelslike}°C</li>
-                    <li>UV Index: {weatherData.uv_index}</li>
-                    <li>Visibility: {weatherData.visibility} km</li>
-                </ul>
-                </div>
+                    <div className="text-center text-2xl font-bold mb-6">
+                        {weatherData.city}, {weatherData.country}
+                    </div>
+                    <div className="grid grid-cols-2 gap-6 text-gray-700">
+                        <ul>
+                            <li>Temperature: {weatherData.temperature}°C</li>
+                            <li>Wind Speed: {weatherData.wind_speed} km/h</li>
+                            <li>Pressure: {weatherData.pressure} hPa</li>
+                            <li>Precipitation: {weatherData.precip} mm</li>
+                        </ul>
+                        <ul>
+                            <li>Humidity: {weatherData.humidity}%</li>
+                            <li>Cloud Cover: {weatherData.cloudcover}%</li>
+                            <li>Feels Like: {weatherData.feelslike}°C</li>
+                            <li>UV Index: {weatherData.uv_index}</li>
+                            <li>Visibility: {weatherData.visibility} km</li>
+                        </ul>
+                    </div>
                 </>
             ) : (
                 <div>Loading weather data...</div>
