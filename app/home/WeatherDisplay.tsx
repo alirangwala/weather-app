@@ -1,4 +1,5 @@
 'use client'
+import { useAppContext } from '@/context';
 import React, { useState, useEffect } from 'react'
 
 interface WeatherDisplayProps {
@@ -33,7 +34,11 @@ const defaultWeatherObj = {
     visibility: 0
 }
 const DEFAULT_ERROR_COPY = "Please enter a valid location"
+
 const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
+
+    const {state, changeApiKey, changeApiUrl} = useAppContext()
+
     const [weatherData, setWeatherData] = useState<WeatherObj>(defaultWeatherObj);
     const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +51,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
 
     const fetchWeather = async () => {
         try {
-            const response = await fetch(`http://api.weatherstack.com/current?access_key=${process.env.NEXT_PUBLIC_WEATHERSTACK_API_KEY}&query=${city}`);
+            const response = await fetch(`${state.api_url}?access_key=${state.api_key}&query=${city}`);
             const data = await response.json();
             if (data.error) {
                 setError("Please enter a valid location");
