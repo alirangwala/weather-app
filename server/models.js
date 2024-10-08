@@ -33,7 +33,7 @@ User.init({
         return encryptedApiKey ? decrypt(encryptedApiKey) : null;
       } catch (error) {
         console.error('Error decrypting API key:', error);
-        return null;  // Return null if decryption fails
+        return null;  
       }
     },
     set(value) {
@@ -51,7 +51,7 @@ User.init({
   timestamps: false
 });
 
-sequelize.sync({ force: true })
+sequelize.sync()
   .then(() => {
     console.log('Database & tables created!');
   })

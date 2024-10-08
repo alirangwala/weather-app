@@ -2,19 +2,13 @@ import express from "express"
 import cors from "cors"
 import { User, sequelize } from './models.js'
 
-const app = express();
+export const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(cors())
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-sequelize.authenticate().then(() => {
-    console.log('Database connected');
-}).catch((error) => {
-    console.error('Unable to connect to the database:', error);
-});
 
 app.get("/users", async (_req, res) => {
     try {
@@ -66,6 +60,7 @@ app.put("/api-info", async (req, res) => {
             apiUrl,
             apiKey,
         }, { where: { email } });
+        res.status(200).json(user);
     } catch (err) {
         console.error('Error during upsert operation:', err);
         res.status(500).json({ error: 'Failed to upsert user', details: err.message });
