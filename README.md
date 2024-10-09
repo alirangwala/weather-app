@@ -1,3 +1,10 @@
+## How to run locally
+1. npm run dev in the root directory 
+2. In a separate terminal cd into the server directory
+3. npm run dev to start server
+4. Go to http://localhost:3000/
+
+
 ## User Flow Diagram
 
 ```mermaid
