@@ -4,7 +4,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useSession } from 'next-auth/react';
 
 const Settings = () => {
-    const { data: session } = useSession();
+    const { data: session, update } = useSession();
 
     const [isOpen, setIsOpen] = useState(false);
     const [apiUrlInput, setApiUrlInput] = useState("");
@@ -15,13 +15,8 @@ const Settings = () => {
         setIsOpen(!isOpen);
     };
 
-    const reloadSession = () => {
-        const event = new Event('visibilitychange');
-        document.dispatchEvent(event);
-      };
-      
     const setUserApiInfo = async (email: string) => {
-        const updated_data = {
+        const update_data = {
             "apiUrl": apiUrlInput,
             "apiKey": apiKeyInput,
         }
@@ -31,14 +26,10 @@ const Settings = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updated_data),
+            body: JSON.stringify(update_data),
           });
           if (response.ok) {
-            const updatedUserData = await response.json();
-            // Once successful, trigger session reload to fetch the new session data
-            reloadSession();
-            console.log(session)
-
+            update(update_data)
           }
         } catch (error) {
           console.error('Error updating data:', error);

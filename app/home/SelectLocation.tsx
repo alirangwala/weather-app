@@ -1,14 +1,10 @@
 'use client'
 import React, { useState } from 'react'
 import WeatherDisplay from './WeatherDisplay';
-import { useSession } from 'next-auth/react';
 
 const SelectLocation = () => {
   const [input, setInput] = useState<string>('');
   const [location, setLocation] = useState<string>('');
-
-  const { data: session } = useSession();
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
