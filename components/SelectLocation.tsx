@@ -13,7 +13,6 @@ const SelectLocation = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLocation(input)
-    console.log("Submitted value:", location);
   };
 
   return (

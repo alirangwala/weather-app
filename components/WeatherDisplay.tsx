@@ -42,10 +42,10 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ city }) => {
 
 
     useEffect(() => {
-        if (city) {
+        if (city && session) {
             fetchWeather();
         }
-    }, [city]);
+    }, [city, session]);
 
     const fetchWeather = async () => {
         try {

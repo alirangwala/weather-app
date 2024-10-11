@@ -40,8 +40,8 @@ const Settings = () => {
         e.preventDefault();
         if (session && session.user?.email) {
             await setUserApiInfo(session.user.email)
+            toggleSettings()
           }
-        console.log("Submitted API Info");
     };
 
     const handleApiUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
